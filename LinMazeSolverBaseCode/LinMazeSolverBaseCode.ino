@@ -69,7 +69,7 @@ MazeSolver mazeSolver;
 
 void selectStandard()
 {
-  maxSpeed = 300;
+  maxSpeed = 100;
   minSpeed = -200;
   baseSpeed = maxSpeed;
   calibrationSpeed = 60;
