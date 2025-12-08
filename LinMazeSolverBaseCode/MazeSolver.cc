@@ -34,11 +34,12 @@ void MazeSolver::followLine() {
 void MazeSolver::loop() {
   if (state == LINE_FOLLOWER) {
     followLine();
+    checkIfJunction();
   }
 
   if (state == JUNCTION) {
     // call junciton identifier function
-    motors.setSpeeds(0, 0);
+    identifyJunction();
     display.clear();
     display.print('J');
   }
@@ -59,5 +60,38 @@ void MazeSolver::loop() {
     display.clear();
     display.print('F');
     return;
+  }
+}
+
+void MazeSolver::checkIfJunction() {
+  if (lineSensorValues[0] > 950 & lineSensorValues[2] > 950){
+    state = JUNCTION;
+  }
+  if (lineSensorValues[2] > 950 & lineSensorValues[3] > 950){
+    state = JUNCTION;
+  }
+  if (lineSensorValues[0] > 950 & lineSensorValues[2] > 950 & lineSensorValues[4] > 950){
+    state = JUNCTION;
+  }
+   if (lineSensorValues[0] > 950 & lineSensorValues[4] > 950){
+    state = JUNCTION;
+  }
+}
+
+void MazeSolver::identifyJunction(){
+  motors.setSpeeds(baseSpeed, baseSpeed);
+  delay(50);
+  lineSensors.readLineBlack(lineSensorValues);
+  motors.setSpeeds(0, 0);
+  if (lineSensorValues[0] > 950 & lineSensorValues[1] > 950 & lineSensorValues[2] > 950 & lineSensorValues[3] > 950 & lineSensorValues[4] > 950){
+    state = FINISHED;
+  }else if (lineSensorValues[0] > 950 & lineSensorValues[2] > 950){
+    state = TURN_LEFT;
+  }else if (lineSensorValues[2] > 950 & lineSensorValues[4] > 950){
+    state = LINE_FOLLOWER;
+  }else if (lineSensorValues[0] > 950 & lineSensorValues[2] > 950 & lineSensorValues[4] > 950){
+    state = TURN_LEFT;
+  }else if (lineSensorValues[0] > 950 & lineSensorValues[4] > 950){
+    state = TURN_LEFT;
   }
 }

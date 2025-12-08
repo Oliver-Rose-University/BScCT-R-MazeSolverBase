@@ -15,7 +15,8 @@ class MazeSolver {
   State state; // value of type state
 
   void followLine();
-  
+  void checkIfJunction();
+  void identifyJunction();
   public:
 
     // constructor
@@ -25,6 +26,5 @@ class MazeSolver {
     void loop();
 
 };
-
 #endif
 
