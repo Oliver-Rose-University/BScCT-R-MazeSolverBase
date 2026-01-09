@@ -109,41 +109,85 @@ void MazeSolver::identifyJunction() {
 bool first = true;
 
 void MazeSolver::countNumber() {
-  convertNumber();
   display.clear();
   display.gotoXY(0, 0);
 
   for (int i = 0; i < count; i++){
     if (i == 8){
       display.gotoXY(0,1);}
-    display.print(path[i]);
+    display.print(convertNumber(path[i]));
+  }
+  simplifyPath();
+}
+
+void MazeSolver::simplifyPath() {
+  if (path[count -2] == BACK){
+    if (path[count -3] == LEFT & path[count -1] == LEFT){
+      path[count -3] = FORWARD;
+      path[count -2] = NONE;
+      path[count -1] = NONE;
+      count -3;}
+    else if (path[count -3] == LEFT & path[count -1] == FORWARD){
+      path[count -3] = RIGHT;
+      path[count -2] = NONE;
+      path[count -1] = NONE;
+      count -3;}
+    else if (path[count -3] == FORWARD & path[count -1] == LEFT){
+      path[count -3] = RIGHT;
+      path[count -2] = NONE;
+      path[count -1] = NONE;
+      count -3;}
+    else if (path[count -3] == FORWARD & path[count -1] == FORWARD){
+      path[count -3] = BACK;
+      path[count -2] = NONE;
+      path[count -1] = NONE;
+      count -3;}
+    else if (path[count -3] == RIGHT & path[count -1] == LEFT){
+      path[count -3] = BACK;
+      path[count -2] = NONE;
+      path[count -1] = NONE;
+      count -3;}
+  }
+
+
+}
+
+char MazeSolver::convertNumber(Decisions d){
+  if (d == RIGHT){
+    return 'R';
+  }
+  if (d == LEFT){
+    return 'L';
+  }
+  if (d == BACK){
+    return 'B';
+  }
+  if (d == FORWARD){
+    return 'f';
   }
 }
 
 
 
-void MazeSolver::convertNumber(){
-  if (path(count) == 0):
-
-
-}
-
-
-
 void MazeSolver::turnLeft() {
-
+  if (lineSensorValues[2] > 750){
+    path[count] = LEFT;
+    countNumber();
+    count++; }
+   else if (lineSensorValues[4] > 750){
+    path[count] = LEFT;
+    countNumber();
+    count++; }
   motors.setSpeeds(baseSpeed, baseSpeed);
   delay(250);
   motors.setSpeeds(0, 0);
-
+ 
   motors.setSpeeds(-baseSpeed, baseSpeed);
   delay(755);
   motors.setSpeeds(0, 0);
   state = LINE_FOLLOWER;
 
-  path[count] = LEFT;
-  countNumber();
-  count++;
+
 }
 
 void MazeSolver::turnRight() {
@@ -157,9 +201,9 @@ void MazeSolver::turnRight() {
   motors.setSpeeds(0, 0);
   state = LINE_FOLLOWER;
 
-  path[count] = RIGHT;
-  count++;
-  countNumber();
+  // path[count] = RIGHT;
+  // count++;
+  // countNumber();
 }
 
 void MazeSolver::uTurn() {

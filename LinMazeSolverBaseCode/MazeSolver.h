@@ -13,10 +13,11 @@ enum State {
 };
 
 enum Decisions {
+  NONE,
   RIGHT,
   LEFT,
   BACK,
-  FORWARD
+  FORWARD,
 };
 // Right = 0, Left = 1, Back = 2, Forwards = 3
 
@@ -48,7 +49,9 @@ class MazeSolver {
 
   void countNumber();
 
-  void convertNumber();
+  char convertNumber(Decisions d);
+
+  void simplifyPath();
   
   public:
 
