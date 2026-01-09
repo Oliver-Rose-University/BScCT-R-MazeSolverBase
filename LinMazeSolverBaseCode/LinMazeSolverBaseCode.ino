@@ -167,9 +167,9 @@ void setup()
 
   // Wait for button B to be pressed and released.
   display.clear();
-  display.print(F("Press B"));
+  display.print(F("Made by"));
   display.gotoXY(0, 1);
-  display.print(F("to calib"));
+  display.print(F("Oli"));
   while(!buttonB.getSingleDebouncedPress());
 
   calibrateSensors();
@@ -185,6 +185,6 @@ void setup()
 
 void loop()
 {
-  display.clear();
+  //display.clear();
   mazeSolver.loop();
 }

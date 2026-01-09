@@ -1,4 +1,3 @@
-
 #include <Pololu3piPlus32U4.h>
 #include <PololuMenu.h>
 
@@ -8,6 +7,7 @@ using namespace Pololu3piPlus32U4;
 #include "Shared.h"
 MazeSolver::MazeSolver() {
   state = LINE_FOLLOWER;
+
 }
 
 void MazeSolver::followLine() {
@@ -55,7 +55,7 @@ void MazeSolver::checkIfDeadEnd() {
 
 void MazeSolver::identifyJunction() {
 
-  display.clear();
+  // display.clear();
 
   delay(500);
 
@@ -87,6 +87,9 @@ void MazeSolver::identifyJunction() {
     delay(100);
 
     state = LINE_FOLLOWER;
+      path[count] = FORWARD;
+      count++;
+      countNumber();
     return;
   }
 
@@ -105,6 +108,28 @@ void MazeSolver::identifyJunction() {
 
 bool first = true;
 
+void MazeSolver::countNumber() {
+  convertNumber();
+  display.clear();
+  display.gotoXY(0, 0);
+
+  for (int i = 0; i < count; i++){
+    if (i == 8){
+      display.gotoXY(0,1);}
+    display.print(path[i]);
+  }
+}
+
+
+
+void MazeSolver::convertNumber(){
+  if (path(count) == 0):
+
+
+}
+
+
+
 void MazeSolver::turnLeft() {
 
   motors.setSpeeds(baseSpeed, baseSpeed);
@@ -115,6 +140,10 @@ void MazeSolver::turnLeft() {
   delay(755);
   motors.setSpeeds(0, 0);
   state = LINE_FOLLOWER;
+
+  path[count] = LEFT;
+  countNumber();
+  count++;
 }
 
 void MazeSolver::turnRight() {
@@ -127,6 +156,10 @@ void MazeSolver::turnRight() {
   delay(755);
   motors.setSpeeds(0, 0);
   state = LINE_FOLLOWER;
+
+  path[count] = RIGHT;
+  count++;
+  countNumber();
 }
 
 void MazeSolver::uTurn() {
@@ -134,18 +167,24 @@ void MazeSolver::uTurn() {
   delay(1600);
   motors.setSpeeds(0, 0);
   state = LINE_FOLLOWER;
+  path[count] = BACK;
+  count++;
+  countNumber();
 }
 
 void MazeSolver::loop() {
+
+  countNumber();
   // display.clear();
-  display.gotoXY(0, 0);
-  display.print(state);
+  // display.gotoXY(0, 0);
+  //display.print(state);
 
   if (state == LINE_FOLLOWER) {
     followLine();
     //check if junction there's a junction and change state otherwise
     checkIfJunction();
     checkIfDeadEnd();
+
   }
 
   if (state == JUNCTION) {
@@ -168,7 +207,7 @@ void MazeSolver::loop() {
   }
 
   if (state == FAKE_END) {
-    display.clear();
+    // display.clear();
 
     while (!buttonB.getSingleDebouncedPress()) {
       uint16_t position = lineSensors.readLineBlack(lineSensorValues);
