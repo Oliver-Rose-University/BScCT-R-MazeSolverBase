@@ -126,27 +126,27 @@ void MazeSolver::simplifyPath() {
       path[count -3] = FORWARD;
       path[count -2] = NONE;
       path[count -1] = NONE;
-      count -3;}
+      count = count -2;}
     else if (path[count -3] == LEFT & path[count -1] == FORWARD){
       path[count -3] = RIGHT;
       path[count -2] = NONE;
       path[count -1] = NONE;
-      count -3;}
+     count = count -2;}
     else if (path[count -3] == FORWARD & path[count -1] == LEFT){
       path[count -3] = RIGHT;
       path[count -2] = NONE;
       path[count -1] = NONE;
-      count -3;}
+     count = count -2;}
     else if (path[count -3] == FORWARD & path[count -1] == FORWARD){
       path[count -3] = BACK;
       path[count -2] = NONE;
       path[count -1] = NONE;
-      count -3;}
+      count = count -2;}
     else if (path[count -3] == RIGHT & path[count -1] == LEFT){
       path[count -3] = BACK;
       path[count -2] = NONE;
       path[count -1] = NONE;
-      count -3;}
+      count = count -2;}
   }
 
 
@@ -163,7 +163,7 @@ char MazeSolver::convertNumber(Decisions d){
     return 'B';
   }
   if (d == FORWARD){
-    return 'f';
+    return 'F';
   }
 }
 
