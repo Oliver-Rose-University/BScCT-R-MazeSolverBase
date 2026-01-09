@@ -18,6 +18,7 @@ using namespace Pololu3piPlus32U4;
 // LCD display;
 OLED display;
 
+Buzzer buzzer;
 LineSensors lineSensors;
 Motors motors;
 ButtonA buttonA;
@@ -70,10 +71,10 @@ MazeSolver mazeSolver;
 void selectStandard()
 {
   maxSpeed = 100;
-  minSpeed = -200;
+  minSpeed = -100;
   baseSpeed = maxSpeed;
   calibrationSpeed = 60;
-  proportional = 100; // P coefficient = 1/4
+  proportional = 64; // P coefficient = 1/4
   derivative = 256; // D coefficient = 1
 }
 
@@ -157,7 +158,11 @@ void setup()
 
   loadCustomCharacters();
 
+  // Play a little welcome song
+  // buzzer.play(">g32>>c32");
+
   // To bypass the menu, replace this function with
+  // selectHyper(), selectStandard(), or selectTurtle().
   selectStandard();
 
   // Wait for button B to be pressed and released.
@@ -174,9 +179,12 @@ void setup()
   // Play music and wait for it to finish before we start driving.
   display.clear();
   display.print(F("Go!"));
+  // buzzer.play("L16 cdegreg4");
+  // while(buzzer.isPlaying());
 }
 
 void loop()
 {
+  display.clear();
   mazeSolver.loop();
 }

@@ -6,8 +6,10 @@ enum State {
   LINE_FOLLOWER,
   JUNCTION,
   TURN_LEFT,
+  TURN_RIGHT,
   U_TURN,
-  FINISHED
+  FINISHED,
+  FAKE_END
 };
 
 class MazeSolver {
@@ -15,11 +17,19 @@ class MazeSolver {
   State state; // value of type state
 
   void followLine();
+
   void checkIfJunction();
-  void identifyJunction();
-  void turnLeft();
-  void uTurn();
+
   void checkIfDeadEnd();
+
+  void identifyJunction();
+
+  void turnLeft();
+
+  void turnRight();
+
+  void uTurn();
+  
   public:
 
     // constructor
@@ -29,5 +39,6 @@ class MazeSolver {
     void loop();
 
 };
+
 #endif
 
