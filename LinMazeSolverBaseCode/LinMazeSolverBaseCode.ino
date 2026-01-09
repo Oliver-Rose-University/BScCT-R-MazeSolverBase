@@ -167,9 +167,9 @@ void setup()
 
   // Wait for button B to be pressed and released.
   display.clear();
-  display.print(F("Press B"));
+  display.print(F("NoticeMe"));
   display.gotoXY(0, 1);
-  display.print(F("to calib"));
+  display.print(F("Senpai"));
   while(!buttonB.getSingleDebouncedPress());
 
   calibrateSensors();
