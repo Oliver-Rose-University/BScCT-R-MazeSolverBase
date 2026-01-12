@@ -10,6 +10,7 @@ class SolutionFollower {
   void turnRight();
   void identifyJunction();
   void countNumber();
+  int count = 0;
 
 
   public:
