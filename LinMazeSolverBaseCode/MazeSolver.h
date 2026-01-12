@@ -29,8 +29,7 @@ class MazeSolver {
   State state; // value of type state
 
   
-  int count = 0;
-  int path[256];
+
   int pathText[256];
 
   void followLine();
@@ -52,8 +51,12 @@ class MazeSolver {
   char convertNumber(Decisions d);
 
   void simplifyPath();
+
   
   public:
+    int count = 0;
+    int path[256];
+    bool isFinished();
 
     // constructor
     MazeSolver();

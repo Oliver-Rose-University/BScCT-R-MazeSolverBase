@@ -272,3 +272,10 @@ void MazeSolver::loop() {
     }
   }
 }
+bool MazeSolver::isFinished(){
+  if (state == FINISHED){
+    return true;}
+  else{
+    return false;
+  }
+}
