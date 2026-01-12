@@ -1,4 +1,3 @@
-
 #include <Pololu3piPlus32U4.h>
 #include <PololuMenu.h>
 
@@ -8,6 +7,7 @@ using namespace Pololu3piPlus32U4;
 #include "Shared.h"
 MazeSolver::MazeSolver() {
   state = LINE_FOLLOWER;
+
 }
 
 void MazeSolver::followLine() {
@@ -55,7 +55,7 @@ void MazeSolver::checkIfDeadEnd() {
 
 void MazeSolver::identifyJunction() {
 
-  display.clear();
+  // display.clear();
 
   delay(500);
 
@@ -87,6 +87,9 @@ void MazeSolver::identifyJunction() {
     delay(100);
 
     state = LINE_FOLLOWER;
+      path[count] = FORWARD;
+      count++;
+      countNumber();
     return;
   }
 
@@ -105,16 +108,86 @@ void MazeSolver::identifyJunction() {
 
 bool first = true;
 
-void MazeSolver::turnLeft() {
+void MazeSolver::countNumber() {
+  display.clear();
+  display.gotoXY(0, 0);
 
+  for (int i = 0; i < count; i++){
+    if (i == 8){
+      display.gotoXY(0,1);}
+    display.print(convertNumber(path[i]));
+  }
+  simplifyPath();
+}
+
+void MazeSolver::simplifyPath() {
+  if (path[count -2] == BACK){
+    if (path[count -3] == LEFT & path[count -1] == LEFT){
+      path[count -3] = FORWARD;
+      path[count -2] = NONE;
+      path[count -1] = NONE;
+      count = count -2;}
+    else if (path[count -3] == LEFT & path[count -1] == FORWARD){
+      path[count -3] = RIGHT;
+      path[count -2] = NONE;
+      path[count -1] = NONE;
+     count = count -2;}
+    else if (path[count -3] == FORWARD & path[count -1] == LEFT){
+      path[count -3] = RIGHT;
+      path[count -2] = NONE;
+      path[count -1] = NONE;
+     count = count -2;}
+    else if (path[count -3] == FORWARD & path[count -1] == FORWARD){
+      path[count -3] = BACK;
+      path[count -2] = NONE;
+      path[count -1] = NONE;
+      count = count -2;}
+    else if (path[count -3] == RIGHT & path[count -1] == LEFT){
+      path[count -3] = BACK;
+      path[count -2] = NONE;
+      path[count -1] = NONE;
+      count = count -2;}
+  }
+
+
+}
+
+char MazeSolver::convertNumber(Decisions d){
+  if (d == RIGHT){
+    return 'R';
+  }
+  if (d == LEFT){
+    return 'L';
+  }
+  if (d == BACK){
+    return 'B';
+  }
+  if (d == FORWARD){
+    return 'F';
+  }
+}
+
+
+
+void MazeSolver::turnLeft() {
+  if (lineSensorValues[2] > 750){
+    path[count] = LEFT;
+    countNumber();
+    count++; }
+   else if (lineSensorValues[4] > 750){
+    path[count] = LEFT;
+    countNumber();
+    count++; }
   motors.setSpeeds(baseSpeed, baseSpeed);
   delay(250);
   motors.setSpeeds(0, 0);
-
+ 
   motors.setSpeeds(-baseSpeed, baseSpeed);
   delay(755);
   motors.setSpeeds(0, 0);
   state = LINE_FOLLOWER;
+
+
 }
 
 void MazeSolver::turnRight() {
@@ -127,6 +200,10 @@ void MazeSolver::turnRight() {
   delay(755);
   motors.setSpeeds(0, 0);
   state = LINE_FOLLOWER;
+
+  // path[count] = RIGHT;
+  // count++;
+  // countNumber();
 }
 
 void MazeSolver::uTurn() {
@@ -134,18 +211,24 @@ void MazeSolver::uTurn() {
   delay(1600);
   motors.setSpeeds(0, 0);
   state = LINE_FOLLOWER;
+  path[count] = BACK;
+  count++;
+  countNumber();
 }
 
 void MazeSolver::loop() {
+
+  countNumber();
   // display.clear();
-  display.gotoXY(0, 0);
-  display.print(state);
+  // display.gotoXY(0, 0);
+  //display.print(state);
 
   if (state == LINE_FOLLOWER) {
     followLine();
     //check if junction there's a junction and change state otherwise
     checkIfJunction();
     checkIfDeadEnd();
+
   }
 
   if (state == JUNCTION) {
@@ -168,7 +251,7 @@ void MazeSolver::loop() {
   }
 
   if (state == FAKE_END) {
-    display.clear();
+    // display.clear();
 
     while (!buttonB.getSingleDebouncedPress()) {
       uint16_t position = lineSensors.readLineBlack(lineSensorValues);
@@ -187,5 +270,12 @@ void MazeSolver::loop() {
 
       delay(50);
     }
+  }
+}
+bool MazeSolver::isFinished(){
+  if (state == FINISHED){
+    return true;}
+  else{
+    return false;
   }
 }

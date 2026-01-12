@@ -12,9 +12,25 @@ enum State {
   FAKE_END
 };
 
+enum Decisions {
+  NONE,
+  RIGHT,
+  LEFT,
+  BACK,
+  FORWARD,
+};
+// Right = 0, Left = 1, Back = 2, Forwards = 3
+
+
+
+
 class MazeSolver {
   private:
   State state; // value of type state
+
+  
+
+  int pathText[256];
 
   void followLine();
 
@@ -29,8 +45,18 @@ class MazeSolver {
   void turnRight();
 
   void uTurn();
+
+  void countNumber();
+
+  char convertNumber(Decisions d);
+
+  void simplifyPath();
+
   
   public:
+    int count = 0;
+    int path[256];
+    bool isFinished();
 
     // constructor
     MazeSolver();
